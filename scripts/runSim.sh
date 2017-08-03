@@ -20,7 +20,6 @@ if [ ! $trpc_running ]; then
   trpc_pid=$!
 fi
 yarn redeploy
-yarn buy
 yarn sim
 if [ ! $trpc_running ]; then
   kill -9 $trpc_pid

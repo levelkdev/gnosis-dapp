@@ -1,12 +1,13 @@
 import _ from 'lodash'
-import { web3 } from '../src/utils/w3'
-import toWei from '../src/utils/toWei'
-import requireContract from '../src/utils/requireContract'
-import shortAddress from '../src/utils/shortAddress'
+import { web3 } from '../../src/utils/w3'
+import toWei from '../../src/utils/toWei'
+import requireContract from '../../src/utils/requireContract'
+import shortAddress from '../../src/utils/shortAddress'
 import {
   approveAndBuy,
-  approveMarketContractTransfer
-} from '../src/market'
+  approveMarketContractTransfer,
+  buyEthTokens
+} from '../../src/market'
 
 const StandardMarketFactory = requireContract('StandardMarketFactory')
 const StandardMarket = requireContract('StandardMarket')
@@ -28,8 +29,8 @@ let outcomeTokens = []
 
 export default async function () {
   // buy a lot of eth tokens for accounts
-  // await buyEthTokens()
-  // await wait(delay)
+  await purchaseInitialTokens()
+  await wait(delay)
 
   // initialize all the contracts to create a new market
   const market = await createMarket()
@@ -145,9 +146,9 @@ export default async function () {
     const categoricalEvtAddress = eventTx.logs[0].args.categoricalEvent
     categoricalEvt = await CategoricalEvent.at(categoricalEvtAddress)
     const catEvtState = await categoricalEvt.state()
-    _.forEach(catEvtState.props.getOutcomeTokens, async (outcomeTokenAddress) => {
+    _.forEach(catEvtState.props.getOutcomeTokens, async (outcomeTokenAddress, i) => {
       let outcomeToken = await OutcomeToken.at(outcomeTokenAddress)
-      console.log('outcomeToken ', shortAddress(outcomeToken.address))
+      console.log(` ${i}: outcomeToken `, shortAddress(outcomeToken.address))
       outcomeTokens.push(outcomeToken)
     })
 
@@ -164,20 +165,14 @@ export default async function () {
     return market
   }
 
-  async function buyEthTokens () {
-    await buyEthTokensFor(accounts[0], toWei(75))
+  async function purchaseInitialTokens () {
+    await buyEthTokens(75, accounts[0])
     await wait(delay)
 
-    await buyEthTokensFor(accounts[1], toWei(75))
+    await buyEthTokens(75, accounts[1])
     await wait(delay)
 
-    await buyEthTokensFor(accounts[2], toWei(75))
+    await buyEthTokens(75, accounts[2])
     await wait(delay)
-  }
-
-  async function buyEthTokensFor (address, numTokens) {
-    const etherToken = await EtherToken.deployed()
-    console.log(`${shortAddress(address)} buys ${numTokens} eth tokens`)
-    await etherToken.deposit({ value: numTokens, from: address })
   }
 }

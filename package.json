@@ -22,8 +22,8 @@
     "build-artifacts": "node ./scripts/buildArtifacts.js",
     "redeploy": "truffle migrate --reset && yarn build-artifacts",
     "recompile": "truffle compile --all",
-    "buy": "SCRIPT_NAME=buy truffle exec ./scripts/run.js",
-    "sim": "SCRIPT_NAME=sim truffle exec ./scripts/run.js",
-    "balances": "scripts/exec.sh ./scripts/balances"
+    "buy": "SCRIPT_PATH=seeders/buy truffle exec ./scripts/run.js",
+    "sim": "SCRIPT_PATH=seeders/sim truffle exec ./scripts/run.js",
+    "balances": "SCRIPT_PATH=utils/balances truffle exec ./scripts/run.js"
   }
 }
