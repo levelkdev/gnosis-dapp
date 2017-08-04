@@ -1,6 +1,6 @@
-import { web3 } from '../src/utils/w3'
-import requireContract from '../src/utils/requireContract'
-import { buyEthTokens } from '../src/market'
+import { web3 } from '../../src/utils/w3'
+import requireContract from '../../src/utils/requireContract'
+import { buyEthTokens } from '../../src/market'
 
 const { accounts } = web3.eth
 

@@ -1,12 +1,19 @@
 require('babel-polyfill')
 require('babel-register')
 
-const runScript = require(`./${process.env.SCRIPT_PATH}`).default
+const { SCRIPT_PATH: scriptPath } = process.env
+
+const runScript = require(`./${scriptPath}`).default
 
 module.exports = function (callback) {
   async function run () {
-    await runScript()
-    callback()
+    try {
+      await runScript()
+    } catch (err) {
+      console.log(`${scriptPath} failed: `, err)
+    } finally {
+      callback()
+    }
   }
   run()
 }

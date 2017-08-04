@@ -8,6 +8,7 @@ import {
   approveMarketContractTransfer,
   buyEthTokens
 } from '../../src/market'
+// import logAllState from '../utils/logAllState'
 
 const StandardMarketFactory = requireContract('StandardMarketFactory')
 const StandardMarket = requireContract('StandardMarket')
@@ -47,63 +48,9 @@ export default async function () {
   await approveAndBuy(market, accounts[1], 1, toWei(2))
   await approveAndBuy(market, accounts[2], 0, toWei(18))
 
-  await logAllState()
+  // await logAllState()
 
   await wait(delay)
-
-  async function logAllState () {
-    let state = await etherToken.state({
-      calls: [
-        ['balanceOf', accounts[0]],
-        ['balanceOf', accounts[1]],
-        ['balanceOf', accounts[2]],
-        ['balanceOf', marketContractAddress]
-      ]
-    })
-    console.log(state.output())
-
-    state = await oracle.state()
-    console.log(state.output())
-
-    state = await categoricalEvt.state()
-    console.log(state.output())
-
-    await logMarketState()
-
-    await logMarketMakerState()
-
-    _.forEach(outcomeTokens, async (outcomeToken) => {
-      state = await outcomeToken.state({
-        calls: [
-          ['balanceOf', accounts[0]],
-          ['balanceOf', accounts[1]],
-          ['balanceOf', accounts[2]],
-          ['balanceOf', marketContractAddress]
-        ]
-      })
-      console.log(state.output())
-    })
-  }
-
-  async function logMarketState () {
-    const state = await market.state({
-      calls: [
-        ['netOutcomeTokensSold', 0],
-        ['netOutcomeTokensSold', 1]
-      ]
-    })
-    console.log(state.output())
-  }
-
-  async function logMarketMakerState () {
-    const state = await lmsrMarketMaker.state({
-      calls: [
-        ['calcCost', marketContractAddress, 0, 10000],
-        ['calcCost', marketContractAddress, 1, 10000]
-      ]
-    })
-    console.log(state.output())
-  }
 
   async function fundMarket (amount) {
     console.log(`fund market with ${amount}`)
@@ -161,6 +108,7 @@ export default async function () {
       0
     )
     marketContractAddress = marketTx.logs[0].args.market
+    console.log(`market created: ${marketContractAddress}`)
     const market = await StandardMarket.at(marketContractAddress)
     return market
   }

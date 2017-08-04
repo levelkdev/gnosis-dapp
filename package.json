@@ -18,12 +18,13 @@
     "babel-preset-stage-0": "^6.24.1"
   },
   "scripts": {
-    "exec": "./scripts/runSim.sh",
-    "build-artifacts": "node ./scripts/buildArtifacts.js",
+    "exec-sim": "./scripts/runSim.sh",
+    "build-artifacts": "node ./scripts/artifactor/runArtifactBuild.js",
     "redeploy": "truffle migrate --reset && yarn build-artifacts",
     "recompile": "truffle compile --all",
     "buy": "SCRIPT_PATH=seeders/buy truffle exec ./scripts/run.js",
     "sim": "SCRIPT_PATH=seeders/sim truffle exec ./scripts/run.js",
-    "balances": "SCRIPT_PATH=utils/balances truffle exec ./scripts/run.js"
+    "balances": "SCRIPT_PATH=utils/balances truffle exec ./scripts/run.js",
+    "log-all": "SCRIPT_PATH=utils/logAllState truffle exec ./scripts/run.js"
   }
 }
