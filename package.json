@@ -25,6 +25,9 @@
     "buy": "SCRIPT_PATH=seeders/buy truffle exec ./scripts/run.js",
     "sim": "SCRIPT_PATH=seeders/sim truffle exec ./scripts/run.js",
     "balances": "SCRIPT_PATH=utils/balances truffle exec ./scripts/run.js",
-    "log-all": "SCRIPT_PATH=utils/logAllState truffle exec ./scripts/run.js"
+    "log-all": "SCRIPT_PATH=utils/logAllState truffle exec ./scripts/run.js",
+    "testrpc": "./scripts/runTestrpc.sh",
+    "sim-debug": "SCRIPT_PATH=seeders/sim node --nolazy --inspect-brk=5858 ./scripts/exec.js",
+    "debug": "node --nolazy --inspect-brk=5858  stuff.js"
   }
 }

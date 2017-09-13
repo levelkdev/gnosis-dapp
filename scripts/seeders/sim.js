@@ -1,14 +1,16 @@
 import _ from 'lodash'
 import { web3 } from '../../src/utils/w3'
 import toWei from '../../src/utils/toWei'
+import fromWei from '../../src/utils/fromWei'
 import requireContract from '../../src/utils/requireContract'
 import shortAddress from '../../src/utils/shortAddress'
+import addressName from '../../src/utils/addressName'
 import {
   approveAndBuy,
   approveMarketContractTransfer,
   buyEthTokens
 } from '../../src/market'
-// import logAllState from '../utils/logAllState'
+import logMarketState from '../utils/logMarketState'
 
 const StandardMarketFactory = requireContract('StandardMarketFactory')
 const StandardMarket = requireContract('StandardMarket')
@@ -48,12 +50,12 @@ export default async function () {
   await approveAndBuy(market, accounts[1], 1, toWei(2))
   await approveAndBuy(market, accounts[2], 0, toWei(18))
 
-  // await logAllState()
+  await logMarketState()
 
   await wait(delay)
 
   async function fundMarket (amount) {
-    console.log(`fund market with ${amount}`)
+    console.log(`${addressName(accounts[0])} funded market with ${fromWei(amount)} EthToken`)
     await market.fund(amount, { from: accounts[0] })
   }
 
@@ -77,14 +79,14 @@ export default async function () {
 
     etherToken = await EtherToken.deployed()
 
-    console.log('creating oracle')
+    // console.log('creating oracle')
     let oracleTx = await centralizedOracleFactory.createCentralizedOracle(ipfsHash)
     const oracleAddress = oracleTx.logs[0].args.centralizedOracle
     oracle = await CentralizedOracle.at(oracleAddress)
 
     await wait(delay)
 
-    console.log('creating categorical event')
+    // console.log('creating categorical event')
     const eventTx = await eventFactory.createCategoricalEvent(
       etherToken.address,
       oracle.address,
@@ -95,20 +97,20 @@ export default async function () {
     const catEvtState = await categoricalEvt.state()
     _.forEach(catEvtState.props.getOutcomeTokens, async (outcomeTokenAddress, i) => {
       let outcomeToken = await OutcomeToken.at(outcomeTokenAddress)
-      console.log(` ${i}: outcomeToken `, shortAddress(outcomeToken.address))
+      // console.log(` ${i}: outcomeToken `, shortAddress(outcomeToken.address))
       outcomeTokens.push(outcomeToken)
     })
 
     await wait(delay)
 
-    console.log('creating market')
+    // console.log('creating market')
     const marketTx = await standardMarketFactory.createMarket(
       categoricalEvt.address,
       lmsrMarketMaker.address,
       0
     )
     marketContractAddress = marketTx.logs[0].args.market
-    console.log(`market created: ${marketContractAddress}`)
+    // console.log(`market created: ${marketContractAddress}`)
     const market = await StandardMarket.at(marketContractAddress)
     return market
   }
