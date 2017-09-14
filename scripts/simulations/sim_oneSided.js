@@ -13,14 +13,12 @@ import {
 } from '../../src/market'
 import logMarketState from '../../src/loggers/logMarketState'
 import logOutcomeTokenPrices from '../../src/loggers/logOutcomeTokenPrices'
+import logOutcomeTokenBalances from '../../src/loggers/logOutcomeTokenBalances'
 import logEthTokenBalances from '../../src/loggers/logEthTokenBalances'
 
 export default async function () {
   // initialize all the contracts to create a new market
   const { market, outcomeTokens, oracle } = await createMarket()
-
-  console.log('')
-  await logEthTokenBalances(market)
 
   console.log('')
   // buy eth tokens for accounts
@@ -40,9 +38,19 @@ export default async function () {
 
   console.log('')
   await logOutcomeTokenPrices(market)
+  console.log('')
+  await logOutcomeTokenBalances(market)
 
   console.log('')
   await buyOutcomeToken(market, accounts[1], 0, toWei(1))
+  
+    console.log('')
+    await logOutcomeTokenPrices(market)
+    console.log('')
+    await logOutcomeTokenBalances(market)
+  
+    console.log('')
+    await buyOutcomeToken(market, accounts[1], 0, toWei(1))
 
   // console.log('')
   // await logOutcomeTokenPrices(market)

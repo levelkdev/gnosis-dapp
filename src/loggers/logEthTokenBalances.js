@@ -8,13 +8,14 @@ const EtherToken = requireContract('EtherToken')
 
 export default async function logEthTokenBalances (market) {
   const etherToken = await EtherToken.deployed()
+  const evtAddress = await market.eventContract.call()
   
   let state = await etherToken.state({
     calls: [
       ['balanceOf', accounts[0]],
       ['balanceOf', accounts[1]],
       ['balanceOf', accounts[2]],
-      ['balanceOf', market.address]
+      ['balanceOf', evtAddress]
     ]
   })
 
