@@ -71,7 +71,7 @@ export async function buyEthTokens (amount, address) {
 }
 
 export async function approveAndBuy (market, buyer, outcome, amount) {
-  await approveMarketContractTransfer(market, buyer, amount)
+  await approveMarketBuy(market, buyer, amount)
   return await buyOutcomeToken(market, buyer, outcome, amount)
 }
 
@@ -87,7 +87,19 @@ export async function buyOutcomeToken (market, buyer, outcomeTokenIndex, numToke
   return mkTx
 }
 
-export async function approveMarketContractTransfer (market, tokenOwner, numEthTokens) {
+export async function sellOutcomeToken (market, seller, outcomeTokenIndex, numTokens) {
+  const minProfit = 0
+  const profitBigNum = await market.buy.call(
+    outcomeTokenIndex, numTokens, minProfit, { from: seller }
+  )
+  const profit = fromWei(profitBigNum.toNumber())
+  const mkTx = await market.sell(outcomeTokenIndex, numTokens, minProfit, { from: seller, gas: 4500000 })
+  console.log(`${addressName(seller)} sold ${fromWei(numTokens)} ${outcomeTokenName(outcomeTokenIndex)} for ${profit}`)
+  
+  return mkTx
+}
+
+export async function approveMarketBuy (market, tokenOwner, numEthTokens) {
   const etherToken = await EtherToken.deployed()
   // console.log(`market approved to spend ${fromWei(numEthTokens)} EthToken owned by ${addressName(tokenOwner)}`)
   return await etherToken.approve(market.address, numEthTokens, { from: tokenOwner, gas: 4500000 })

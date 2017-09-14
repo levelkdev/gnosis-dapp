@@ -31,6 +31,8 @@
     "sim_basic": "SCRIPT_PATH=simulations/sim_basic node ./scripts/exec.js",
     "sim_sequentialBuys-debug": "SCRIPT_PATH=simulations/sim_sequentialBuys node --nolazy --inspect-brk=5858 ./scripts/exec.js",
     "sim_sequentialBuys": "SCRIPT_PATH=simulations/sim_sequentialBuys node ./scripts/exec.js",
+    "sim_oneSided-debug": "SCRIPT_PATH=simulations/sim_oneSided node --nolazy --inspect-brk=5858 ./scripts/exec.js",
+    "sim_oneSided": "SCRIPT_PATH=simulations/sim_oneSided node ./scripts/exec.js",
     "debug": "node --nolazy --inspect-brk=5858  stuff.js"
   }
 }

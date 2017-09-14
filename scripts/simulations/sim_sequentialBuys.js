@@ -3,13 +3,12 @@ import toWei from '../../src/utils/toWei'
 import requireContract from '../../src/utils/requireContract'
 import {
   createMarket,
-  approveMarketContractTransfer,
+  approveMarketBuy,
   buyEthTokens,
   buyOutcomeToken,
   fundMarket
 } from '../../src/market'
 import logMarketState from '../../src/loggers/logMarketState'
-import logEthTokenBalances from '../../src/loggers/logEthTokenBalances'
 import logOutcomeTokenPrices from '../../src/loggers/logOutcomeTokenPrices'
 
 export default async function () {
@@ -24,23 +23,23 @@ export default async function () {
 
   console.log('')
   // approve the transfer for 10 ethToken from accounts[0] to the market contract
-  await approveMarketContractTransfer(market, accounts[0], toWei(10))
+  await approveMarketBuy(market, accounts[0], toWei(10))
 
   // accounts[0] funds the market with 10 ethToken
   await fundMarket(market, accounts[0], toWei(10))
   
-  await approveMarketContractTransfer(market, accounts[1], toWei(100))
-  await approveMarketContractTransfer(market, accounts[2], toWei(100))
+  await approveMarketBuy(market, accounts[1], toWei(100))
+  await approveMarketBuy(market, accounts[2], toWei(100))
 
   await account1Buy(market)
-  await account1Buy(market)
+  /* await account1Buy(market)
   await account1Buy(market)
   await account1Buy(market)
   
   await account2Buy(market)
   await account2Buy(market)
   await account2Buy(market)
-  await account2Buy(market)
+  await account2Buy(market) */
 
   console.log('')
   await logMarketState(market)

@@ -1,4 +1,5 @@
 import accounts from '../../src/utils/accounts'
+import { web3 } from '../../src/utils/w3'
 import toWei from '../../src/utils/toWei'
 import fromWei from '../../src/utils/fromWei'
 import requireContract from '../../src/utils/requireContract'
@@ -7,16 +8,19 @@ import {
   approveMarketBuy,
   buyEthTokens,
   buyOutcomeToken,
+  sellOutcomeToken,
   fundMarket
 } from '../../src/market'
 import logMarketState from '../../src/loggers/logMarketState'
 import logOutcomeTokenPrices from '../../src/loggers/logOutcomeTokenPrices'
-
-const LMSRMarketMaker = requireContract('LMSRMarketMaker')
+import logEthTokenBalances from '../../src/loggers/logEthTokenBalances'
 
 export default async function () {
   // initialize all the contracts to create a new market
   const { market, outcomeTokens, oracle } = await createMarket()
+
+  console.log('')
+  await logEthTokenBalances(market)
 
   console.log('')
   // buy eth tokens for accounts
@@ -34,23 +38,17 @@ export default async function () {
   await approveMarketBuy(market, accounts[1], toWei(100))
   await approveMarketBuy(market, accounts[2], toWei(100))
 
-  const fee = await market.calcMarketFee.call(.5)
-  console.log('FEE: ', fromWei(fee.toNumber()))
-  
   console.log('')
   await logOutcomeTokenPrices(market)
 
   console.log('')
-  await buyOutcomeToken(market, accounts[1], 1, toWei(2))
+  await buyOutcomeToken(market, accounts[1], 0, toWei(1))
 
-  console.log('')
-  await logOutcomeTokenPrices(market)
+  // console.log('')
+  // await logOutcomeTokenPrices(market)
 
-  console.log('')
-  await buyOutcomeToken(market, accounts[2], 1, toWei(18))
-  
-  console.log('')
-  await logOutcomeTokenPrices(market)
+  // console.log('')
+  // await sellOutcomeToken(market, accounts[1], 0, toWei(1))
 
   console.log('')
   await logMarketState(market)
