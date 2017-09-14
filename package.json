@@ -27,7 +27,10 @@
     "balances": "SCRIPT_PATH=utils/balances truffle exec ./scripts/run.js",
     "log-all": "SCRIPT_PATH=utils/logAllState truffle exec ./scripts/run.js",
     "testrpc": "./scripts/runTestrpc.sh",
-    "sim-debug": "SCRIPT_PATH=seeders/sim node --nolazy --inspect-brk=5858 ./scripts/exec.js",
+    "sim_basic-debug": "SCRIPT_PATH=simulations/sim_basic node --nolazy --inspect-brk=5858 ./scripts/exec.js",
+    "sim_basic": "SCRIPT_PATH=simulations/sim_basic node ./scripts/exec.js",
+    "sim_sequentialBuys-debug": "SCRIPT_PATH=simulations/sim_sequentialBuys node --nolazy --inspect-brk=5858 ./scripts/exec.js",
+    "sim_sequentialBuys": "SCRIPT_PATH=simulations/sim_sequentialBuys node ./scripts/exec.js",
     "debug": "node --nolazy --inspect-brk=5858  stuff.js"
   }
 }
