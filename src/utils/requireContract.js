@@ -1,3 +1,4 @@
+import truffleContract from 'truffle-contract'
 import truffleExt from 'truffle-ext'
 import {
   web3,
@@ -10,7 +11,8 @@ export default (contractName) => {
 }
 
 export function truffleArtifact (contractName) {
-  const contract = require(`../../build/artifacts/${contractName}.sol.js`)
+  const contractJSON = require(`../../build/contracts/${contractName}.json`)
+  const contract = truffleContract(contractJSON)
   contract.setProvider(web3Provider)
   contract.defaults({
     from: web3.eth.accounts[0],

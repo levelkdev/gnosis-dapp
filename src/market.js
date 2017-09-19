@@ -56,6 +56,7 @@ export async function createMarket () {
   // console.log(`market created: ${marketContractAddress}`)
   const market = await StandardMarket.at(marketContractAddress)
   return {
+    categoricalEvt,
     market,
     outcomeTokens,
     oracle
@@ -88,12 +89,13 @@ export async function buyOutcomeToken (market, buyer, outcomeTokenIndex, numToke
 }
 
 export async function sellOutcomeToken (market, seller, outcomeTokenIndex, numTokens) {
-  const minProfit = 0
-  const profitBigNum = await market.buy.call(
+  const minProfit = toWei(0.01)
+  const profitBigNum = await market.sell.call(
     outcomeTokenIndex, numTokens, minProfit, { from: seller }
   )
   const profit = fromWei(profitBigNum.toNumber())
   const mkTx = await market.sell(outcomeTokenIndex, numTokens, minProfit, { from: seller, gas: 4500000 })
+  console.log('MARKET TX: ', mkTx.output())
   console.log(`${addressName(seller)} sold ${fromWei(numTokens)} ${outcomeTokenName(outcomeTokenIndex)} for ${profit}`)
   
   return mkTx
@@ -104,6 +106,14 @@ export async function approveMarketBuy (market, tokenOwner, numEthTokens) {
   // console.log(`market approved to spend ${fromWei(numEthTokens)} EthToken owned by ${addressName(tokenOwner)}`)
   return await etherToken.approve(market.address, numEthTokens, { from: tokenOwner, gas: 4500000 })
 }
+
+/*
+export async function approveMarketSell (market, tokenOwner, numEthTokens) {
+  const etherToken = await EtherToken.deployed()
+  // console.log(`market approved to spend ${fromWei(numEthTokens)} EthToken owned by ${addressName(tokenOwner)}`)
+  return await etherToken.approve(market.address, numEthTokens, { from: tokenOwner, gas: 4500000 })
+}
+*/
 
 export async function fundMarket (market, account, amount) {
   console.log(`${addressName(account)} funded market with ${fromWei(amount)} EthToken`)

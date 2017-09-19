@@ -9,7 +9,8 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "babel-register": "^6.24.1",
-    "truffle-artifactor": "1.0.2"
+    "truffle-artifactor": "^2.1.5",
+    "truffle-contract": "^3.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -19,8 +20,7 @@
   },
   "scripts": {
     "exec-sim": "./scripts/runSim.sh",
-    "build-artifacts": "node ./scripts/artifactor/runArtifactBuild.js",
-    "redeploy": "truffle migrate --reset && yarn build-artifacts",
+    "redeploy": "truffle migrate --reset",
     "recompile": "truffle compile --all",
     "buy": "SCRIPT_PATH=seeders/buy truffle exec ./scripts/run.js",
     "sim": "SCRIPT_PATH=seeders/sim truffle exec ./scripts/run.js",

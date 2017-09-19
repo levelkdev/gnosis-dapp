@@ -12,9 +12,11 @@ let LMSRMarketMaker = artifacts.require('@gnosis.pm/gnosis-core-contracts/contra
 let StandardMarketFactory = artifacts.require('@gnosis.pm/gnosis-core-contracts/contracts/Markets/StandardMarketFactory')
 let CampaignFactory = artifacts.require('@gnosis.pm/gnosis-core-contracts/contracts/Markets/CampaignFactory')
 
+let StandardMarketFactoryMod = artifacts.require('@gnosis.pm/gnosis-core-contracts/contracts/Markets/StandardMarketFactoryMod')
+
 module.exports = function (deployer) {
   deployer.deploy(Math)
-  deployer.link(Math, [EventFactory, UltimateOracleFactory, LMSRMarketMaker, StandardMarketFactory, EtherToken])
+  deployer.link(Math, [EventFactory, UltimateOracleFactory, LMSRMarketMaker, StandardMarketFactory, EtherToken, StandardMarketFactoryMod])
 
   deployer.deploy(EventFactory).then(() => {
     deployer.deploy(FutarchyOracleFactory, EventFactory.address)
@@ -38,4 +40,7 @@ module.exports = function (deployer) {
 
   deployer.link(Math, CampaignFactory)
   deployer.deploy(CampaignFactory)
+
+  deployer.link(Math, StandardMarketFactoryMod)
+  deployer.deploy(StandardMarketFactoryMod)
 }
