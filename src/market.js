@@ -109,14 +109,6 @@ export async function approveMarketBuy (market, tokenOwner, numEthTokens) {
   return await etherToken.approve(market.address, numEthTokens, { from: tokenOwner, gas: 4500000 })
 }
 
-/*
-export async function approveMarketSell (market, tokenOwner, numEthTokens) {
-  const etherToken = await EtherToken.deployed()
-  // console.log(`market approved to spend ${fromWei(numEthTokens)} EthToken owned by ${addressName(tokenOwner)}`)
-  return await etherToken.approve(market.address, numEthTokens, { from: tokenOwner, gas: 4500000 })
-}
-*/
-
 export async function fundMarket (market, account, amount) {
   console.log(`${addressName(account)} funded market with ${fromWei(amount)} EthToken`)
   return await market.fund(amount, { from: account })
@@ -130,4 +122,33 @@ export async function getOutcomeTokens (market) {
   const outcomeYesAddress = await categoricalEvent.outcomeTokens.call(1)
   const outcomeYes = await OutcomeToken.at(outcomeYesAddress)
   return [outcomeNo, outcomeYes]
+}
+
+export async function setOutcome (market, outcomeIndex) {
+  const categoricalEvent = await CategoricalEvent.at(
+    await market.eventContract.call()
+  )
+  const oracle = await CentralizedOracle.at(
+    await categoricalEvent.oracle.call()
+  )
+  const oracleSetOutcomeTx = await oracle.setOutcome(outcomeIndex)
+  const evtSetOutcomeTx = await categoricalEvent.setOutcome()
+  console.log(`outcome set to ${outcomeTokenName(outcomeIndex)}`)
+  return evtSetOutcomeTx
+}
+
+export async function closeMarket (market) {
+  const closeTx = await market.close()
+  console.log('Market closed')
+  return closeTx
+}
+
+export async function redeemWinnings (market, sender) {
+  const categoricalEvent = await CategoricalEvent.at(
+    await market.eventContract.call()
+  )
+  const tx = await categoricalEvent.redeemWinnings({ from: sender })
+  const { winnings } = tx.logs[0].args
+  console.log(`${addressName(sender)} redeemed ${fromWei(winnings)} winnings`)
+  return tx
 }

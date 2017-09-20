@@ -9,7 +9,10 @@ import {
   buyOutcomeToken,
   sellOutcomeToken,
   fundMarket,
-  getOutcomeTokens
+  getOutcomeTokens,
+  setOutcome,
+  closeMarket,
+  redeemWinnings
 } from '../../src/market'
 import logMarketState from '../../src/loggers/logMarketState'
 import logOutcomeTokenPrices from '../../src/loggers/logOutcomeTokenPrices'
@@ -24,8 +27,7 @@ export default async function () {
   // buy eth tokens for accounts
   await buyEthTokens(100, accounts[0])
   await buyEthTokens(100, accounts[1])
-  const buyTx = await buyEthTokens(100, accounts[2])
-  console.log('buy: ', buyTx.output())
+  await buyEthTokens(100, accounts[2])
   
   // approve the transfer for 10 ethToken from accounts[0] to the market contract
   await approveMarketBuy(market, accounts[0], toWei(10))
@@ -49,6 +51,21 @@ export default async function () {
 
   console.log('')
   const tx = await sellOutcomeToken(market, accounts[1], 0, toWei(5))
+
+  console.log('')
+  await setOutcome(market, 0)
+
+  console.log('')
+  await closeMarket(market)
+
+  console.log('')
+  await redeemWinnings(market, accounts[0])
+  
+  console.log('')
+  await redeemWinnings(market, accounts[1])
+  
+  console.log('')
+  await redeemWinnings(market, accounts[2])
 
   console.log('')
   await logMarketState(market)
