@@ -152,3 +152,10 @@ export async function redeemWinnings (market, sender) {
   console.log(`${addressName(sender)} redeemed ${fromWei(winnings)} winnings`)
   return tx
 }
+
+export async function withdrawFees (market, creator) {
+  const tx = await market.withdrawFees({ from: creator })
+  const { fees } = tx.logs[0].args
+  console.log(`${addressName(creator)} withdrew ${fromWei(fees)} fees`)
+  return tx
+}

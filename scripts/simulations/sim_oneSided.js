@@ -12,7 +12,8 @@ import {
   getOutcomeTokens,
   setOutcome,
   closeMarket,
-  redeemWinnings
+  redeemWinnings,
+  withdrawFees
 } from '../../src/market'
 import logMarketState from '../../src/loggers/logMarketState'
 import logOutcomeTokenPrices from '../../src/loggers/logOutcomeTokenPrices'
@@ -66,6 +67,9 @@ export default async function () {
   
   console.log('')
   await redeemWinnings(market, accounts[2])
+
+  console.log('')
+  await withdrawFees(market, accounts[0])
 
   console.log('')
   await logMarketState(market)
