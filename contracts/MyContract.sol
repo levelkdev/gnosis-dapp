@@ -10,7 +10,6 @@ import '@gnosis.pm/gnosis-core-contracts/contracts/Oracles/FutarchyOracleFactory
 import '@gnosis.pm/gnosis-core-contracts/contracts/Oracles/UltimateOracleFactory.sol';
 import '@gnosis.pm/gnosis-core-contracts/contracts/MarketMakers/LMSRMarketMaker.sol';
 import '@gnosis.pm/gnosis-core-contracts/contracts/Markets/StandardMarketFactory.sol';
-import '@gnosis.pm/gnosis-core-contracts/contracts/Markets/StandardMarketFactoryMod.sol';
 import '@gnosis.pm/gnosis-core-contracts/contracts/Markets/CampaignFactory.sol';
 
 contract MyContract {

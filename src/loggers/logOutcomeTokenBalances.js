@@ -2,17 +2,15 @@ import accounts from '../utils/accounts'
 import fromWei from '../utils/fromWei'
 import requireContract from '../utils/requireContract'
 import addressName from '../utils/addressName'
+import { getOutcomeTokens } from '../market'
 
 const CategoricalEvent = requireContract('CategoricalEvent')
 const OutcomeToken = requireContract('OutcomeToken')
 
 export default async function logEthTokenBalances (market) {
-  const evtAddress = await market.eventContract.call()
-  const categoricalEvent = await CategoricalEvent.at(evtAddress)
-  const outcomeNoAddress = await categoricalEvent.outcomeTokens.call(0)
-  const outcomeNo = await OutcomeToken.at(outcomeNoAddress)
-  const outcomeYesAddress = await categoricalEvent.outcomeTokens.call(1)
-  const outcomeYes = await OutcomeToken.at(outcomeYesAddress)
+  const outcomeTokens = await getOutcomeTokens(market)
+  const outcomeNo = outcomeTokens[0]
+  const outcomeYes = outcomeTokens[1]
 
   let stateNo = await outcomeNo.state({
     calls: [

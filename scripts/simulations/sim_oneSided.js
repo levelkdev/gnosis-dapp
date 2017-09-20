@@ -8,7 +8,8 @@ import {
   buyEthTokens,
   buyOutcomeToken,
   sellOutcomeToken,
-  fundMarket
+  fundMarket,
+  getOutcomeTokens
 } from '../../src/market'
 import logMarketState from '../../src/loggers/logMarketState'
 import logOutcomeTokenPrices from '../../src/loggers/logOutcomeTokenPrices'
@@ -17,7 +18,7 @@ import logEthTokenBalances from '../../src/loggers/logEthTokenBalances'
 
 export default async function () {
   // initialize all the contracts to create a new market
-  const { categoricalEvt, market, outcomeTokens, oracle } = await createMarket()
+  const { categoricalEvt, market, oracle } = await createMarket()
 
   console.log('')
   // buy eth tokens for accounts
@@ -42,21 +43,13 @@ export default async function () {
 
   console.log('')
   await buyOutcomeToken(market, accounts[1], 0, toWei(5))
+  
+  console.log('')
+  await buyOutcomeToken(market, accounts[2], 0, toWei(48))
 
   console.log('')
-  // const tx = await sellOutcomeToken(market, accounts[1], 0, toWei(1))
-  // console.log('SELLtx: ', tx)
+  const tx = await sellOutcomeToken(market, accounts[1], 0, toWei(5))
 
   console.log('')
   await logMarketState(market)
-}
-
-function truffleArtifact (contractName) {
-  const contract = require(`../../build/artifacts/${contractName}.sol.js`)
-  contract.setProvider(web3Provider)
-  contract.defaults({
-    from: web3.eth.accounts[0],
-    gas: 4500000
-  })
-  return contract
 }

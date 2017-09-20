@@ -89,13 +89,15 @@ export async function buyOutcomeToken (market, buyer, outcomeTokenIndex, numToke
 }
 
 export async function sellOutcomeToken (market, seller, outcomeTokenIndex, numTokens) {
+  const outcomeTokens = await getOutcomeTokens(market)
+  const outcomeToken = outcomeTokens[outcomeTokenIndex]
+  await outcomeToken.approve(market.address, numTokens, { from: seller })
   const minProfit = toWei(0.01)
   const profitBigNum = await market.sell.call(
     outcomeTokenIndex, numTokens, minProfit, { from: seller }
   )
   const profit = fromWei(profitBigNum.toNumber())
   const mkTx = await market.sell(outcomeTokenIndex, numTokens, minProfit, { from: seller, gas: 4500000 })
-  console.log('MARKET TX: ', mkTx.output())
   console.log(`${addressName(seller)} sold ${fromWei(numTokens)} ${outcomeTokenName(outcomeTokenIndex)} for ${profit}`)
   
   return mkTx
@@ -118,4 +120,14 @@ export async function approveMarketSell (market, tokenOwner, numEthTokens) {
 export async function fundMarket (market, account, amount) {
   console.log(`${addressName(account)} funded market with ${fromWei(amount)} EthToken`)
   return await market.fund(amount, { from: account })
+}
+
+export async function getOutcomeTokens (market) {
+  const evtAddress = await market.eventContract.call()
+  const categoricalEvent = await CategoricalEvent.at(evtAddress)
+  const outcomeNoAddress = await categoricalEvent.outcomeTokens.call(0)
+  const outcomeNo = await OutcomeToken.at(outcomeNoAddress)
+  const outcomeYesAddress = await categoricalEvent.outcomeTokens.call(1)
+  const outcomeYes = await OutcomeToken.at(outcomeYesAddress)
+  return [outcomeNo, outcomeYes]
 }
