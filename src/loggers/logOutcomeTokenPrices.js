@@ -13,6 +13,8 @@ export default async function logOutcomeTokenPrices (market) {
   const noSellPrice = await lmsr.calcProfit(market.address, 0, toWei(1))
   const yesSellPrice = await lmsr.calcProfit(market.address, 1, toWei(1))
 
+  console.log('OutcomeToken Prices')
+  console.log('-------------------')
   console.log('NO  (buy)  : ', fromWei(noBuyPrice.toNumber()))
   console.log('NO  (sell) : ', fromWei(noSellPrice.toNumber()))
   console.log('YES (buy)  : ', fromWei(yesBuyPrice.toNumber()))

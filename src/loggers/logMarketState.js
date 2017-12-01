@@ -9,7 +9,5 @@ export default async function logMarketState (market) {
   await logOutcomeTokenBalances(market)
   console.log('')
 
-  console.log('OutcomeToken Prices')
-  console.log('-------------------')
   return await logOutcomeTokenPrices(market)
 }

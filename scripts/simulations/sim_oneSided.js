@@ -31,29 +31,25 @@ export default async function () {
   await buyEthTokens(100, accounts[2])
   
   // approve the transfer for 10 ethToken from accounts[0] to the market contract
-  await approveMarketBuy(market, accounts[0], toWei(10))
-
-  // accounts[0] funds the market with 10 ethToken
-  console.log('')
-  await fundMarket(market, accounts[0], toWei(10))
-  
+  await approveMarketBuy(market, accounts[0], toWei(100))
   await approveMarketBuy(market, accounts[1], toWei(100))
   await approveMarketBuy(market, accounts[2], toWei(100))
 
-  // console.log('')
-  // await logOutcomeTokenPrices(market)
+  // accounts[0] funds the market with 10 ethToken
+  console.log('')
+  await fundMarket(market, accounts[0], toWei(100))
+
+  console.log('')
+  await logOutcomeTokenPrices(market)
 
   console.log('')
   await logOutcomeTokenBalances(market)
 
   console.log('')
   await buyOutcomeToken(market, accounts[1], 0, toWei(50))
-  
-  // console.log('')
-  // await buyOutcomeToken(market, accounts[2], 0, toWei(48))
 
-  // console.log('')
-  // const tx = await sellOutcomeToken(market, accounts[1], 0, toWei(5))
+  console.log('')
+  await logOutcomeTokenPrices(market)
 
   console.log('')
   await logOutcomeTokenBalances(market)
